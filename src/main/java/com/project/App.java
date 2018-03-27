@@ -1,19 +1,36 @@
 package com.project;
 
+import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.Map;
 
 public class App {
 
     private Client client;
-    private EventLogger eventLogger;
+    private EventLogger defaultLogger;
+    private Map<EventType,EventLogger> loggers;
 
-    public App(Client client, EventLogger eventLogger) {
+
+    public App(Client client, Map<EventType, EventLogger> loggers) {
         this.client = client;
-        this.eventLogger = eventLogger;
+        this.loggers = loggers;
     }
 
-    public void logEvent(Event event) {
+    public App(Client client, EventLogger defaultLogger, Map<EventType, EventLogger> loggers) {
+        this.client = client;
+        this.defaultLogger = defaultLogger;
+        this.loggers = loggers;
+    }
+
+    public void logEvent(EventType eventType, Event event) {
+        EventLogger eventLogger = loggers.get(eventType);
+
+        if(eventLogger == null) {
+            eventLogger = defaultLogger;
+        }
+
         eventLogger.logEvent(event);
     }
 
@@ -25,8 +42,10 @@ public class App {
         Event event = (Event) context.getBean("event");
         Event event1 = (Event) context.getBean("event");
 
-        app.logEvent(event);
-        app.logEvent(event1);
+        System.out.println(context.getBean("client"));
+
+        app.logEvent(EventType.ERROR,event);
+        app.logEvent(EventType.ERROR,event1);
 
         context.close();
     }

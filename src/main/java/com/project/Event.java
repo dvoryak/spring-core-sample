@@ -1,21 +1,26 @@
 package com.project;
 
+import sun.util.resources.LocaleData;
+
 import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 public class Event {
 
-    private static int id = 0;
+    private int id;
     private String msg;
     private Date date;
     private DateFormat dt;
 
     public Event() {
-        id++;
     }
 
     public Event(Date date, DateFormat dt) {
-        this();
+        id = new Random().nextInt();
         this.date = date;
         this.dt = dt;
     }
@@ -42,6 +47,14 @@ public class Event {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public static boolean isDay() {
+        Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now);
+        int hours = calendar.get(Calendar.HOUR_OF_DAY);
+        return hours > 8 && hours < 17;
     }
 
     @Override
