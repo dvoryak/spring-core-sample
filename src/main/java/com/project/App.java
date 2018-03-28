@@ -1,9 +1,13 @@
 package com.project;
 
-import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
+import com.project.aspect.Service;
+import com.project.aspect.StatisticAspect;
+import com.project.loggers.EventLogger;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
+import javax.sql.DataSource;
 import java.util.Map;
 
 public class App {
@@ -46,6 +50,14 @@ public class App {
 
         app.logEvent(EventType.ERROR,event);
         app.logEvent(EventType.ERROR,event1);
+        app.logEvent(null,event1);
+
+        StatisticAspect statistic = (StatisticAspect) context.getBean("statistic");
+        System.out.println(statistic.getMap());
+
+        EventLogger eventLogger = (EventLogger) context.getBean("dbEventLogger");
+        eventLogger.logEvent(new Event("some message"));
+        eventLogger.logEvent(new Event("some messag321312e"));
 
         context.close();
     }
