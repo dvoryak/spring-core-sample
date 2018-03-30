@@ -1,11 +1,10 @@
-package com.project;
+package com.project.loggers;
 
+import com.project.Event;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class FileEventLogger implements EventLogger {
 

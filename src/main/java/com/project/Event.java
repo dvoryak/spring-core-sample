@@ -16,7 +16,10 @@ public class Event {
     private Date date;
     private DateFormat dt;
 
-    public Event() {
+    public Event(String msg) {
+        this.date = new Date();
+        this.id = new Random().nextInt();
+        this.msg = msg;
     }
 
     public Event(Date date, DateFormat dt) {
