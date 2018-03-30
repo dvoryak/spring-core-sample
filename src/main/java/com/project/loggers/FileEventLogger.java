@@ -3,6 +3,7 @@ package com.project.loggers;
 import com.project.Event;
 import org.apache.commons.io.FileUtils;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 
@@ -15,6 +16,7 @@ public class FileEventLogger implements EventLogger {
         this.fileName = fileName;
     }
 
+    @PostConstruct
     public void init() {
         file = new File(fileName);
     }

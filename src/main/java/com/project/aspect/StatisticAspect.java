@@ -21,6 +21,7 @@ public class StatisticAspect {
             "&& !execution(* com.project.loggers.CombinedEventLogger.logEvent(..))")
     public void statistic(JoinPoint joinPoint) {
         Class<?> key = joinPoint.getTarget().getClass();
+
         if(map.containsKey(key)) {
             map.put(key, map.get(key) + 1);
         } else {

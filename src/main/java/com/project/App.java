@@ -1,13 +1,11 @@
 package com.project;
 
-import com.project.aspect.Service;
 import com.project.aspect.StatisticAspect;
 import com.project.loggers.EventLogger;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
-import javax.sql.DataSource;
 import java.util.Map;
 
 public class App {
@@ -39,25 +37,33 @@ public class App {
     }
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext context =
-                new ClassPathXmlApplicationContext(new String[] {"context.xml"});
+        /*ConfigurableApplicationContext context =
+                new ClassPathXmlApplicationContext(new String[] {"context.xml"});*/
+
+        ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(AppContext.class);
+
 
         App app = (App) context.getBean("app");
-        Event event = (Event) context.getBean("event");
-        Event event1 = (Event) context.getBean("event");
+        app.logEvent(EventType.ERROR,new Event("some message"));
+        app.logEvent(EventType.INFO,new Event("some message"));
+        app.logEvent(EventType.INFO,new Event("some message"));
+        app.logEvent(EventType.ERROR,new Event("some message"));
+        app.logEvent(EventType.ERROR,new Event("some message"));
 
-        System.out.println(context.getBean("client"));
-
-        app.logEvent(EventType.ERROR,event);
-        app.logEvent(EventType.ERROR,event1);
-        app.logEvent(null,event1);
-
+        //Statistic aspect
         StatisticAspect statistic = (StatisticAspect) context.getBean("statistic");
-        System.out.println(statistic.getMap());
+        statistic.getMap().forEach((aClass, integer) -> System.out.println(aClass.getSimpleName() + " = " + integer));
 
-        EventLogger eventLogger = (EventLogger) context.getBean("dbEventLogger");
+        //DataBase check
+        /*EventLogger eventLogger = (EventLogger) context.getBean("dbEventLogger");
         eventLogger.logEvent(new Event("some message"));
-        eventLogger.logEvent(new Event("some messag321312e"));
+        eventLogger.logEvent(new Event("some messag321312e"));*/
+
+        //Proxy
+        AppContext appContext = new AppContext();
+        AppContext appContext1 = context.getBean(AppContext.class);
+        System.out.println(appContext.getClass() + " vs " + appContext1.getClass());
+
 
         context.close();
     }

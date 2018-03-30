@@ -3,6 +3,7 @@ package com.project;
 import sun.util.resources.LocaleData;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
@@ -20,6 +21,7 @@ public class Event {
         this.date = new Date();
         this.id = new Random().nextInt();
         this.msg = msg;
+        this.dt = new SimpleDateFormat();
     }
 
     public Event(Date date, DateFormat dt) {

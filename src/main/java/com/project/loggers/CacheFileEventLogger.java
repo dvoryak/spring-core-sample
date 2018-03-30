@@ -2,6 +2,7 @@ package com.project.loggers;
 
 import com.project.Event;
 
+import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class CacheFileEventLogger extends FileEventLogger {
         events.clear();
     }
 
+    @PreDestroy
     public void destroy() {
         writeAndClearList();
     }
